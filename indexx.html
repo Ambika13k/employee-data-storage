@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Data Storage System</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: pink;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            margin: auto;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: pink;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.2);
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+        }
+
+        th {
+            background-color: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🌸 Employee Data Storage System 🌸</h1>
+
+<div class="container">
+
+<form id="employeeForm">
+    <input type="text" id="name" placeholder="Employee Name" required>
+    <input type="text" id="id" placeholder="Employee ID" required>
+    <input type="text" id="dept" placeholder="Department" required>
+    <input type="number" id="attendance" placeholder="Attendance %" required>
+    <br>
+    <button type="submit">Add Employee</button>
+</form>
+
+<table id="employeeTable">
+    <tr>
+        <th>Sr No.</th>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Department</th>
+        <th>Attendance %</th>
+        <th>Action</th>
+    </tr>
+</table>
+
+<canvas id="myChart" style="margin-top:20px;"></canvas>
+
+</div>
+
+<script>
+let count = 1;
+let names = [];
+let attendanceData = [];
+
+let ctx = document.getElementById('myChart').getContext('2d');
+
+let chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: names,
+        datasets: [{
+            label: 'Attendance %',
+            data: attendanceData
+        }]
+    }
+});
+
+document.getElementById("employeeForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let id = document.getElementById("id").value;
+    let dept = document.getElementById("dept").value;
+    let attendance = document.getElementById("attendance").value;
+
+    let table = document.getElementById("employeeTable");
+    let row = table.insertRow();
+
+    row.insertCell(0).innerText = count++;
+    row.insertCell(1).innerText = name;
+    row.insertCell(2).innerText = id;
+    row.insertCell(3).innerText = dept;
+    row.insertCell(4).innerText = attendance + "%";
+
+    let deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "Delete";
+    deleteBtn.onclick = function() {
+        table.deleteRow(row.rowIndex);
+    };
+
+    row.insertCell(5).appendChild(deleteBtn);
+
+    // Update Graph
+    names.push(name);
+    attendanceData.push(attendance);
+    chart.update();
+
+    document.getElementById("employeeForm").reset();
+});
+</script>
+
+</body>
+</html>
